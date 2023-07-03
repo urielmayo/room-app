@@ -3,7 +3,7 @@ from .models import Room, Message
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    room = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+    room = serializers.StringRelatedField(read_only=True)
     sender = serializers.StringRelatedField(read_only=True)
 
     class Meta:

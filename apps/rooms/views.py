@@ -49,7 +49,6 @@ class RoomDetailView(LoginRequiredMixin, DetailView):
 class RoomViewSet(ReadOnlyModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    lookup_field = 'slug'
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
     ]
