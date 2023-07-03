@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block head_content %}
+<title>Create Room</title>
+{% endblock head_content %}
+
+
+{% block container %}
+<form action="{% url 'rooms:create' %}" method="post">{% csrf_token %}
+    {{ form.as_p}}
+    <button class="btn btn-primary w-100" type="submit">Create Room</button>
+</form>
+{% endblock container %}

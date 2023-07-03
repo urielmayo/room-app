@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block head_content %}
+<title>My Rooms</title>
+{% endblock head_content %}
+
+
+{% block container %}
+
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+
+{% if rooms.count > 0 %}
+
+<div class="container text-center">
+    <div>
+        <h1>Rooms</h1>
+    </div>
+    <hr>
+    <div class="row row-cols-5 g-4">
+        {% for room in rooms %}
+        <div class="col">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">{{room.name}}</h5>
+                    <a class="btn btn-primary w-100 stretched-link" href="{% url 'rooms:detail' room.pk %}">JOIN</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% else %}
+<div class="countainer border rounded">
+    No rooms created
+</div>
+{% endif %}
+
+
+{% endblock container %}

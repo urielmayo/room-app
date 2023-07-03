@@ -1,0 +1,38 @@
+<nav class=" navbar navbar-expand-lg bg-dark">
+    <div class="container-fluid">
+
+        <a class="navbar-brand text-white" href="{% url 'rooms:list' %}">ROOMS</a>
+
+        <form class="d-flex flex-grow-1 me-2" role="search" action="{% url 'rooms:list' %}">
+            <div class="input-group">
+                <input class="form-control" name="q" value="{{q}}" type="search" placeholder="Search for room"
+                    aria-label="Search" required>
+            </div>
+        </form>
+
+        <ul class="navbar-nav">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'rooms:create' %}"><i class="bi bi-plus-lg"></i></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{request.user.email}}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'users:logout' %}">Log out</a></li>
+                </ul>
+            </li>
+
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'users:login' %}">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

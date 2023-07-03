@@ -1,0 +1,14 @@
+asgiref
+Django
+django-environ
+pytz
+sqlparse
+psycopg2-binary
+djangorestframework
+markdown
+django-filter
+channels-redis
+channels
+daphne
+redis
+drf-api-logger

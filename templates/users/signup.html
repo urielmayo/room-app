@@ -1,0 +1,21 @@
+{% extends 'users/base.html' %}
+
+{% block head_content %}
+<title>Sign Up</title>
+{% endblock head_content %}
+
+
+{% block container %}
+<div class="container border rounded">
+    <h1 style="text-align: center;">Sign Up</h1>
+
+    {% if error %}
+    <p class="alert alert-danger">{{error}}</p>
+    {% endif %}
+
+    <form action="{% url 'users:signup' %}" method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary w-100 btn-block mb-3" type="submit">Register</button>
+    </form>
+</div>
+{% endblock container %}

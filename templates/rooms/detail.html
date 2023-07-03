@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+
+{% block head_content %}
+<title>{{room.name}}</title>
+{% endblock head_content %}
+
+
+{% block container %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+<div class="card">
+    <div class="card-header text-center">
+        <h3 class="card-title">{{room.name}}</h3>
+    </div>
+    <div class="card-body bg-light overflow-auto" id="messages-list">
+        {% for message in room.messages.all %}
+        <div class="d-flex flex-column m-2 border rounded bg-white">
+            <div class="p-2 text-muted"><strong>{{message.sender}}</strong></div>
+            <div class="p-2">{{message.content}}</div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="card-footer">
+        <form method="post" id="form-message">
+            <div class="input-group mb-3">
+
+                <input type="text" class="form-control" placeholder="Write your message Here" id="room-message-input"
+                    required>
+                <button class="btn btn-primary" type="button" id="room-message-submit">
+                    <i class="bi bi-send"></i>
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock container %}
+
+
+{% block scripts %}
+{{ room.pk|json_script:"room-id" }}
+{{ request.user.email |json_script:"user-email" }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+
+    const roomId = JSON.parse(document.getElementById('room-id').textContent)
+    const userEmail = JSON.parse(document.getElementById('user-email').textContent)
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/rooms/'
+        + roomId
+        + '/'
+    );
+
+    chatSocket.onclose = function (e) {
+        console.log('onclose')
+    }
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        if (data.message) {
+            const newMessage = '<div class="d-flex flex-column m-2 border rounded bg-white">'
+                + '<div class="p-2 text-muted"><strong>' + data.useremail + '</strong></div>'
+                + '<div class="p-2">' + data.message + '</div>'
+                + '</div>'
+            document.querySelector('#messages-list').innerHTML += (newMessage);
+        } else {
+            alert('The message was empty!');
+        }
+
+    };
+
+    $('#form-message').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        const messageInput = $('#room-message-input');
+        const message = messageInput.val();
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'useremail': userEmail,
+            'room_id': roomId
+        }));
+        messageInput.val('');
+    });
+</script>
+{% endblock scripts %}
